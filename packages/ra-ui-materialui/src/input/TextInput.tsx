@@ -42,7 +42,7 @@ const TextInput: FunctionComponent<TextInputProps> = ({
         id,
         input,
         isRequired,
-        meta: { error, touched },
+        meta: { error, submitError, touched },
     } = useInput({
         format,
         onBlur,
@@ -71,11 +71,11 @@ const TextInput: FunctionComponent<TextInputProps> = ({
                     />
                 )
             }
-            error={!!(touched && error)}
+            error={!!(touched && (error || submitError))}
             helperText={
                 <InputHelperText
                     touched={touched}
-                    error={error}
+                    error={error || submitError}
                     helperText={helperText}
                 />
             }

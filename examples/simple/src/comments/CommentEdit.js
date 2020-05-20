@@ -14,6 +14,7 @@ import {
     Title,
     minLength,
 } from 'react-admin'; // eslint-disable-line import/no-unresolved
+import { useDataProvider } from 'ra-core';
 
 const LinkToRelatedPost = ({ record }) => (
     <Link to={`/posts/${record.post_id}`}>
@@ -50,7 +51,18 @@ const CommentEdit = props => {
         save,
         basePath,
         version,
-    } = useEditController(props);
+    } = useEditController({ ...props, undoable: false });
+
+    const dataProvider = useDataProvider();
+
+    async function mySave(values) {
+        const results = await dataProvider.update(resource, values);
+        if (values.body.startsWith('invalid')) {
+            return {
+                body: 'dont like it',
+            };
+        }
+    }
     return (
         <div className="edit-page">
             <Title defaultTitle={`Comment #${record ? record.id : ''}`} />
@@ -70,7 +82,7 @@ const CommentEdit = props => {
                         redirect={redirect}
                         resource={resource}
                         record={record}
-                        save={save}
+                        save={mySave}
                         version={version}
                     >
                         <TextInput disabled source="id" fullWidth />

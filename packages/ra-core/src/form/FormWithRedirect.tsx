@@ -98,7 +98,8 @@ const FormWithRedirect: FC<FormWithRedirectOwnProps & FormProps> = ({
                 : redirect.current;
         const finalValues = sanitizeEmptyValues(finalInitialValues, values);
 
-        onSave.current(finalValues, finalRedirect);
+        const result = onSave.current(finalValues, finalRedirect);
+        return result;
     };
 
     return (
